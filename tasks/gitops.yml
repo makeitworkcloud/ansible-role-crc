@@ -49,6 +49,10 @@
         source: redhat-operators
         sourceNamespace: openshift-marketplace
         installPlanApproval: Automatic
+        config:
+          env:
+            - name: ARGOCD_CLUSTER_CONFIG_NAMESPACES
+              value: openshift-gitops
 
 - name: Wait for ArgoCD instance to be created by operator
   kubernetes.core.k8s_info:
@@ -60,23 +64,6 @@
   until: argocd.resources | default([]) | length > 0
   retries: 60
   delay: 10
-
-- name: Create cluster-admin ClusterRoleBinding for ArgoCD
-  kubernetes.core.k8s:
-    state: present
-    definition:
-      apiVersion: rbac.authorization.k8s.io/v1
-      kind: ClusterRoleBinding
-      metadata:
-        name: openshift-gitops-cluster-admin
-      subjects:
-        - kind: ServiceAccount
-          name: openshift-gitops-argocd-application-controller
-          namespace: openshift-gitops
-      roleRef:
-        kind: ClusterRole
-        name: cluster-admin
-        apiGroup: rbac.authorization.k8s.io
 
 - name: Create AGE keys secret for SOPS decryption
   kubernetes.core.k8s:
