@@ -6,4 +6,4 @@ crc_memory: 57344 # For a system with 64 GB RAM
 crc_external_domain: makeitwork.cloud
 crc_kubeadmin_password: crc
 crc_pull_secret: ""
-crc_version: 2.52.0
+crc_version: 2.57.0
