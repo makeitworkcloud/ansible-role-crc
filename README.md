@@ -124,7 +124,7 @@ crc_pull_secret: ''
 #### Default value
 
 ```YAML
-crc_version: 2.57.0
+crc_version: latest
 ```
 
 ## Discovered Tags

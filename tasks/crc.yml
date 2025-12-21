@@ -1,15 +1,16 @@
 ---
 - name: Download & Extract crc
   ansible.builtin.unarchive:
-    src: "https://developers.redhat.com/content-gateway/file/pub/openshift-v4/clients/crc/{{ crc_version | default('2.52.0') }}/crc-linux-amd64.tar.xz"
+    src: "https://mirror.openshift.com/pub/openshift-v4/clients/crc/{{ crc_version | default('latest') }}/crc-linux-amd64.tar.xz"
     dest: /usr/local/bin/
     remote_src: true
-    include: "crc-linux-{{ crc_version | default('2.52.0') }}-amd64/crc"
     owner: root
     group: root
     mode: "0755"
     extra_opts:
       - --strip-components=1
+      - --wildcards
+      - '*/crc'
   become: true
   become_user: root
 
