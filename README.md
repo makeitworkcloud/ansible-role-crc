@@ -1,6 +1,6 @@
 # ansible-role-crc
 
-Ansible role deploying OpenShift Local (CRC) with custom DNS, TLS certificates, OpenShift GitOps (ArgoCD), and KSOPS for encrypted secret management. Deploys as a regular user with sudo access on a RHEL-based system.
+Deploys OpenShift Local (CRC) with custom DNS and TLS. Optionally installs ArgoCD GitOps operator and creates an Application. Supports SOPS/AGE secret decryption if keys are provided.
 
 ## Table of content
 
