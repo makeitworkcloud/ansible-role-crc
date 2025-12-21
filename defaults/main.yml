@@ -1,9 +1,22 @@
 ---
 # defaults file for crc
-crc_cpus: 10 # For a system with 12 CPU
-crc_disk_size: 500 # 500 GB Disk
-crc_memory: 57344 # For a system with 64 GB RAM
+
+# CRC resource allocation
+crc_cpus: 10
+crc_disk_size: 500
+crc_memory: 57344
 crc_external_domain: makeitwork.cloud
 crc_kubeadmin_password: crc
 crc_pull_secret: ""
 crc_version: 2.57.0
+
+# GitOps configuration
+# Set crc_gitops_repo_url to enable ArgoCD application creation
+crc_gitops_repo_url: ""
+crc_gitops_repo_branch: main
+crc_gitops_bootstrap_path: bootstrap
+crc_gitops_workloads_path: workloads
+
+# AGE private key(s) for SOPS decryption (newline-separated if multiple)
+# This should be passed from encrypted secrets, not stored in plain text
+crc_gitops_age_keys: ""
