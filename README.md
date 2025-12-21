@@ -51,7 +51,7 @@ crc_argocd_app_branch: main
 #### Default value
 
 ```YAML
-crc_argocd_app_path: bootstrap
+crc_argocd_app_path: .
 ```
 
 ### crc_argocd_app_repo
@@ -59,7 +59,7 @@ crc_argocd_app_path: bootstrap
 #### Default value
 
 ```YAML
-crc_argocd_app_repo: https://github.com/makeitworkcloud/kustomize-cluster.git
+crc_argocd_app_repo: ''
 ```
 
 ### crc_cpus
@@ -83,7 +83,7 @@ crc_disk_size: 500
 #### Default value
 
 ```YAML
-crc_external_domain: makeitwork.cloud
+crc_external_domain: crc.local
 ```
 
 ### crc_kubeadmin_password

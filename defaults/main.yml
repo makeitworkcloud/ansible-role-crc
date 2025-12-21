@@ -1,21 +1,20 @@
 ---
-# defaults file for crc
-
 # CRC resource allocation
 crc_cpus: 10
 crc_disk_size: 500
 crc_memory: 57344
-crc_external_domain: makeitwork.cloud
 crc_kubeadmin_password: crc
 crc_pull_secret: ""
 crc_version: latest
 
+# External domain for routes/API
+crc_external_domain: crc.local
+
 # ArgoCD Application configuration
 # Set crc_argocd_app_repo to enable GitOps operator and application creation
-crc_argocd_app_repo: https://github.com/makeitworkcloud/kustomize-cluster.git
+crc_argocd_app_repo: ""
 crc_argocd_app_branch: main
-crc_argocd_app_path: bootstrap
+crc_argocd_app_path: .
 
 # AGE private key(s) for SOPS decryption (newline-separated if multiple)
-# Only used if crc_argocd_app_repo is set
 crc_argocd_age_keys: ""
