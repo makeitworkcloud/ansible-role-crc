@@ -10,13 +10,12 @@ crc_kubeadmin_password: crc
 crc_pull_secret: ""
 crc_version: latest
 
-# GitOps configuration
-# Set crc_gitops_repo_url to enable ArgoCD application creation
-crc_gitops_repo_url: ""
-crc_gitops_repo_branch: main
-crc_gitops_bootstrap_path: bootstrap
-crc_gitops_workloads_path: workloads
+# ArgoCD Application configuration
+# Set crc_argocd_app_repo to enable GitOps operator and application creation
+crc_argocd_app_repo: https://github.com/makeitworkcloud/kustomize-cluster.git
+crc_argocd_app_branch: main
+crc_argocd_app_path: bootstrap
 
 # AGE private key(s) for SOPS decryption (newline-separated if multiple)
-# This should be passed from encrypted secrets, not stored in plain text
-crc_gitops_age_keys: ""
+# Only used if crc_argocd_app_repo is set
+crc_argocd_age_keys: ""

@@ -14,3 +14,4 @@
   ansible.builtin.include_tasks: banner.yml
 - name: Running gitops.yml
   ansible.builtin.include_tasks: gitops.yml
+  when: crc_argocd_app_repo | default('') | length > 0

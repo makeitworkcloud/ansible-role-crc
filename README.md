@@ -6,14 +6,13 @@ Ansible role deploying OpenShift Local (CRC) with custom DNS, TLS certificates, 
 
 - [Requirements](#requirements)
 - [Default Variables](#default-variables)
+  - [crc_argocd_age_keys](#crc_argocd_age_keys)
+  - [crc_argocd_app_branch](#crc_argocd_app_branch)
+  - [crc_argocd_app_path](#crc_argocd_app_path)
+  - [crc_argocd_app_repo](#crc_argocd_app_repo)
   - [crc_cpus](#crc_cpus)
   - [crc_disk_size](#crc_disk_size)
   - [crc_external_domain](#crc_external_domain)
-  - [crc_gitops_age_keys](#crc_gitops_age_keys)
-  - [crc_gitops_bootstrap_path](#crc_gitops_bootstrap_path)
-  - [crc_gitops_repo_branch](#crc_gitops_repo_branch)
-  - [crc_gitops_repo_url](#crc_gitops_repo_url)
-  - [crc_gitops_workloads_path](#crc_gitops_workloads_path)
   - [crc_kubeadmin_password](#crc_kubeadmin_password)
   - [crc_memory](#crc_memory)
   - [crc_pull_secret](#crc_pull_secret)
@@ -30,6 +29,38 @@ Ansible role deploying OpenShift Local (CRC) with custom DNS, TLS certificates, 
 - Minimum Ansible version: `2.1`
 
 ## Default Variables
+
+### crc_argocd_age_keys
+
+#### Default value
+
+```YAML
+crc_argocd_age_keys: ''
+```
+
+### crc_argocd_app_branch
+
+#### Default value
+
+```YAML
+crc_argocd_app_branch: main
+```
+
+### crc_argocd_app_path
+
+#### Default value
+
+```YAML
+crc_argocd_app_path: bootstrap
+```
+
+### crc_argocd_app_repo
+
+#### Default value
+
+```YAML
+crc_argocd_app_repo: https://github.com/makeitworkcloud/kustomize-cluster.git
+```
 
 ### crc_cpus
 
@@ -53,46 +84,6 @@ crc_disk_size: 500
 
 ```YAML
 crc_external_domain: makeitwork.cloud
-```
-
-### crc_gitops_age_keys
-
-#### Default value
-
-```YAML
-crc_gitops_age_keys: ''
-```
-
-### crc_gitops_bootstrap_path
-
-#### Default value
-
-```YAML
-crc_gitops_bootstrap_path: bootstrap
-```
-
-### crc_gitops_repo_branch
-
-#### Default value
-
-```YAML
-crc_gitops_repo_branch: main
-```
-
-### crc_gitops_repo_url
-
-#### Default value
-
-```YAML
-crc_gitops_repo_url: ''
-```
-
-### crc_gitops_workloads_path
-
-#### Default value
-
-```YAML
-crc_gitops_workloads_path: workloads
 ```
 
 ### crc_kubeadmin_password

@@ -1,6 +1,6 @@
 ---
-# Install OpenShift GitOps operator and create base ArgoCD instance
-# Adapted from ansible-role-ksops/tasks/gitops.yml
+# Install OpenShift GitOps operator and create ArgoCD Application
+# Only included when crc_argocd_app_repo is set
 
 - name: GitOps Namespace
   kubernetes.core.k8s:
@@ -59,40 +59,23 @@
         name: sops-age-keys
         namespace: openshift-gitops
       data:
-        key.txt: "{{ crc_gitops_age_keys | b64encode }}"
-  when: crc_gitops_age_keys | default('') | length > 0
+        key.txt: "{{ crc_argocd_age_keys | b64encode }}"
+  when: crc_argocd_age_keys | default('') | length > 0
 
-- name: Create cluster-admin ClusterRoleBinding for ArgoCD
-  kubernetes.core.k8s:
-    state: present
-    definition:
-      apiVersion: rbac.authorization.k8s.io/v1
-      kind: ClusterRoleBinding
-      metadata:
-        name: openshift-gitops-cluster-admin
-      subjects:
-        - kind: ServiceAccount
-          name: openshift-gitops-argocd-application-controller
-          namespace: openshift-gitops
-      roleRef:
-        kind: ClusterRole
-        name: cluster-admin
-        apiGroup: rbac.authorization.k8s.io
-
-- name: Create bootstrap ArgoCD Application (KSOPS configuration)
+- name: Create ArgoCD Application
   kubernetes.core.k8s:
     state: present
     definition:
       apiVersion: argoproj.io/v1alpha1
       kind: Application
       metadata:
-        name: gitops-bootstrap
+        name: "{{ crc_argocd_app_repo | urlsplit('path') | basename | regex_replace('\\.git$', '') }}"
         namespace: openshift-gitops
       spec:
         source:
-          repoURL: "{{ crc_gitops_repo_url }}"
-          path: "{{ crc_gitops_bootstrap_path }}"
-          targetRevision: "{{ crc_gitops_repo_branch }}"
+          repoURL: "{{ crc_argocd_app_repo }}"
+          path: "{{ crc_argocd_app_path }}"
+          targetRevision: "{{ crc_argocd_app_branch }}"
         destination:
           server: https://kubernetes.default.svc
         project: default
@@ -100,42 +83,3 @@
           automated:
             prune: true
             selfHeal: true
-  when: crc_gitops_repo_url | default('') | length > 0
-
-- name: Wait for bootstrap Application to be synced and healthy
-  kubernetes.core.k8s_info:
-    api_version: argoproj.io/v1alpha1
-    kind: Application
-    name: gitops-bootstrap
-    namespace: openshift-gitops
-  register: bootstrap_app
-  until: >
-    bootstrap_app.resources | default([]) | length > 0 and
-    bootstrap_app.resources[0].status.sync.status | default('') == 'Synced' and
-    bootstrap_app.resources[0].status.health.status | default('') == 'Healthy'
-  retries: 60
-  delay: 10
-  when: crc_gitops_repo_url | default('') | length > 0
-
-- name: Create workloads ArgoCD Application
-  kubernetes.core.k8s:
-    state: present
-    definition:
-      apiVersion: argoproj.io/v1alpha1
-      kind: Application
-      metadata:
-        name: gitops-workloads
-        namespace: openshift-gitops
-      spec:
-        source:
-          repoURL: "{{ crc_gitops_repo_url }}"
-          path: "{{ crc_gitops_workloads_path }}"
-          targetRevision: "{{ crc_gitops_repo_branch }}"
-        destination:
-          server: https://kubernetes.default.svc
-        project: default
-        syncPolicy:
-          automated:
-            prune: true
-            selfHeal: true
-  when: crc_gitops_repo_url | default('') | length > 0
