@@ -82,6 +82,22 @@
         name: cluster-admin
         apiGroup: rbac.authorization.k8s.io
 
+- name: Patch argocd-secret with GitHub OAuth credentials
+  kubernetes.core.k8s:
+    state: patched
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: argocd-secret
+        namespace: openshift-gitops
+      stringData:
+        dex.github.clientID: "{{ crc_dex_github_client_id }}"
+        dex.github.clientSecret: "{{ crc_dex_github_client_secret }}"
+  when:
+    - crc_dex_github_client_id | default('') | length > 0
+    - crc_dex_github_client_secret | default('') | length > 0
+
 - name: Create AGE keys secret for SOPS decryption
   kubernetes.core.k8s:
     state: present

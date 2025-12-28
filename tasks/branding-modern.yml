@@ -1,0 +1,77 @@
+---
+# Modern console branding for OpenShift 4.19+
+# Uses logos API with theme support (dark/light) and favicon
+
+- name: Create console logo ConfigMap (modern)
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: console-custom-logo
+        namespace: openshift-config
+      data:
+        console-logo-light.svg: |
+          {{ lookup('file', role_path + '/files/console-logo.svg') | indent(10) }}
+        console-logo-dark.svg: |
+          {{ lookup('file', role_path + '/files/console-logo-dark.svg') | indent(10) }}
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Create console favicon ConfigMap (modern)
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: console-custom-favicon
+        namespace: openshift-config
+      binaryData:
+        favicon.png: "{{ lookup('file', role_path + '/files/console-favicon.png') | b64encode }}"
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Patch Console operator with custom branding (modern)
+  kubernetes.core.k8s:
+    state: patched
+    api_version: operator.openshift.io/v1
+    kind: Console
+    name: cluster
+    definition:
+      spec:
+        customization:
+          customProductName: "{{ crc_console_product_name }}"
+          logos:
+            - type: Masthead
+              themes:
+                - mode: Light
+                  source:
+                    from: ConfigMap
+                    configMap:
+                      name: console-custom-logo
+                      key: console-logo-light.svg
+                - mode: Dark
+                  source:
+                    from: ConfigMap
+                    configMap:
+                      name: console-custom-logo
+                      key: console-logo-dark.svg
+            - type: Favicon
+              themes:
+                - mode: Light
+                  source:
+                    from: ConfigMap
+                    configMap:
+                      name: console-custom-favicon
+                      key: favicon.png
+                - mode: Dark
+                  source:
+                    from: ConfigMap
+                    configMap:
+                      name: console-custom-favicon
+                      key: favicon.png
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Display modern branding notice
+  ansible.builtin.debug:
+    msg: "Applied modern console branding with theme support (masthead + favicon)."

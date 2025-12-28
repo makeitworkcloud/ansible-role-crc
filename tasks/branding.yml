@@ -1,0 +1,36 @@
+---
+# Console branding - version detection and conditional API selection
+
+- name: Get cluster version
+  kubernetes.core.k8s_info:
+    api_version: config.openshift.io/v1
+    kind: ClusterVersion
+    name: version
+  register: cluster_version
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Set OpenShift version facts
+  ansible.builtin.set_fact:
+    ocp_version: "{{ cluster_version.resources[0].status.desired.version | default('4.14.0') }}"
+  when: cluster_version.resources is defined and cluster_version.resources | length > 0
+
+- name: Set OpenShift version facts (fallback)
+  ansible.builtin.set_fact:
+    ocp_version: "4.14.0"
+  when: cluster_version.resources is not defined or cluster_version.resources | length == 0
+
+- name: Extract major.minor version
+  ansible.builtin.set_fact:
+    ocp_major_minor: "{{ ocp_version.split('.')[:2] | join('.') }}"
+
+- name: Display detected OpenShift version
+  ansible.builtin.debug:
+    msg: "Detected OpenShift version: {{ ocp_version }} ({{ ocp_major_minor }})"
+
+- name: Use modern logos API (OpenShift 4.19+)
+  ansible.builtin.include_tasks: branding-modern.yml
+  when: ocp_major_minor is version('4.19', '>=')
+
+- name: Use legacy customLogoFile API (OpenShift < 4.19)
+  ansible.builtin.include_tasks: branding-legacy.yml
+  when: ocp_major_minor is version('4.19', '<')
