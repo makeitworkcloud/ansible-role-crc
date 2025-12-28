@@ -41,6 +41,7 @@
       spec:
         customization:
           customProductName: "{{ crc_console_product_name }}"
+          customLogoFile: null  # Clear legacy field to avoid conflict
           logos:
             - type: Masthead
               themes:

@@ -25,6 +25,7 @@
     definition:
       spec:
         customization:
+          logos: null  # Clear modern field to avoid conflict
           customLogoFile:
             name: console-custom-logo
             key: console-logo.svg
