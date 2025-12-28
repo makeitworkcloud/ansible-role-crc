@@ -18,8 +18,3 @@ crc_argocd_app_path: .
 
 # AGE private key(s) for SOPS decryption (newline-separated if multiple)
 crc_argocd_age_keys: ""
-
-# Console branding (optional)
-# Set to true to enable custom logo and product name
-crc_console_branding: false
-crc_console_product_name: "Make IT Work Cloud"

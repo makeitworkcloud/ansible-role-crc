@@ -10,8 +10,6 @@ Deploys OpenShift Local (CRC) with custom DNS and TLS. Optionally installs ArgoC
   - [crc_argocd_app_branch](#crc_argocd_app_branch)
   - [crc_argocd_app_path](#crc_argocd_app_path)
   - [crc_argocd_app_repo](#crc_argocd_app_repo)
-  - [crc_console_branding](#crc_console_branding)
-  - [crc_console_product_name](#crc_console_product_name)
   - [crc_cpus](#crc_cpus)
   - [crc_disk_size](#crc_disk_size)
   - [crc_external_domain](#crc_external_domain)
@@ -62,22 +60,6 @@ crc_argocd_app_path: .
 
 ```YAML
 crc_argocd_app_repo: ''
-```
-
-### crc_console_branding
-
-#### Default value
-
-```YAML
-crc_console_branding: false
-```
-
-### crc_console_product_name
-
-#### Default value
-
-```YAML
-crc_console_product_name: Make IT Work Cloud
 ```
 
 ### crc_cpus

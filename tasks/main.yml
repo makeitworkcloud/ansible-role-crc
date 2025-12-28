@@ -10,11 +10,6 @@
   ansible.builtin.include_tasks: crc.yml
 - name: Running certs.yml
   ansible.builtin.include_tasks: certs.yml
-- name: Running banner.yml
-  ansible.builtin.include_tasks: banner.yml
-- name: Running branding.yml
-  ansible.builtin.include_tasks: branding.yml
-  when: crc_console_branding | default(false) | bool
 - name: Running gitops.yml
   ansible.builtin.include_tasks: gitops.yml
   when: crc_argocd_app_repo | default('') | length > 0
