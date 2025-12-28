@@ -15,7 +15,7 @@
         console-logo-light.svg: |
           {{ lookup('file', role_path + '/files/console-logo.svg') | indent(10) }}
         console-logo-dark.svg: |
-          {{ lookup('file', role_path + '/files/console-logo-dark.svg') | indent(10) }}
+          {{ lookup('file', role_path + '/files/console-logo.svg') | indent(10) }}
   ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Create console favicon ConfigMap (modern)
