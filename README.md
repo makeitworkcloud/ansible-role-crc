@@ -2,7 +2,7 @@
 
 Deploys OpenShift Local (CRC) with custom DNS and TLS. Optionally installs ArgoCD GitOps operator and creates an Application. Supports SOPS/AGE secret decryption if keys are provided.
 
-## Table of content
+## Table of contents
 
 - [Requirements](#requirements)
 - [Default Variables](#default-variables)
