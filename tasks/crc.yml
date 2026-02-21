@@ -48,6 +48,7 @@
   ansible.builtin.shell:
     cmd: |
       /usr/local/bin/crc config set consent-telemetry no
+      /usr/local/bin/crc config set host-network-access true
       /usr/local/bin/crc config set cpus {{ crc_cpus | default('10') }}
       /usr/local/bin/crc config set disk-size {{ crc_disk_size | default('500') }}
       /usr/local/bin/crc config set kubeadmin-password {{ crc_kubeadmin_password | default('crc') }}
