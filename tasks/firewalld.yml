@@ -1,4 +1,12 @@
 ---
+- name: Permit HTTP traffic
+  ansible.posix.firewalld:
+    service: http
+    permanent: true
+    state: enabled
+  become: true
+  become_user: root
+
 - name: Permit HTTPS traffic
   ansible.posix.firewalld:
     service: https
@@ -9,7 +17,7 @@
 
 - name: Permit API traffic
   ansible.posix.firewalld:
-    port: 6443/tcp
+    service: kube-apiserver
     permanent: true
     state: enabled
   become: true
