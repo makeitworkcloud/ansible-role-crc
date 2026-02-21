@@ -17,4 +17,4 @@ backend api
     mode tcp
     balance roundrobin
     option ssl-hello-chk
-    server webserver1 127.0.0.1:6443
+    server crc {{ crc_backend_ip }}:6443
