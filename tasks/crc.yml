@@ -64,13 +64,30 @@
     - config_crc_cmd.stderr_lines
 
 - name: Start crc
-  ansible.builtin.command: crc start
-  register: start_crc_cmd
-  changed_when: start_crc_cmd.rc == 0
+  block:
+    - name: Run crc start
+      ansible.builtin.command: crc start
+      register: start_crc_cmd
+      changed_when: start_crc_cmd.rc == 0
 
-- name: Display start output
-  ansible.builtin.debug:
-    var: "{{ item }}"
-  loop:
-    - start_crc_cmd.stdout_lines
-    - start_crc_cmd.stderr_lines
+    - name: Display start output
+      ansible.builtin.debug:
+        var: "{{ item }}"
+      loop:
+        - start_crc_cmd.stdout_lines
+        - start_crc_cmd.stderr_lines
+  rescue:
+    - name: Display crc start failure output
+      ansible.builtin.debug:
+        msg:
+          - "ERROR: crc start failed with return code {{ start_crc_cmd.rc | default('unknown') }}"
+          - ""
+          - "=== STDOUT ==="
+          - "{{ start_crc_cmd.stdout_lines | default(['(no stdout)']) }}"
+          - ""
+          - "=== STDERR ==="
+          - "{{ start_crc_cmd.stderr_lines | default(['(no stderr)']) }}"
+
+    - name: Fail workflow after displaying error
+      ansible.builtin.fail:
+        msg: "crc start failed - see output above"
