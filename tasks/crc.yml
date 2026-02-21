@@ -24,7 +24,27 @@
   become: true
   become_user: root
 
-- name: Configure crc
+- name: Initial crc setup
+  ansible.builtin.command: /usr/local/bin/crc setup
+  register: initial_setup_cmd
+  changed_when: initial_setup_cmd.rc == 0
+
+- name: Configure network-mode
+  ansible.builtin.command: /usr/local/bin/crc config set network-mode system
+  register: network_mode_cmd
+  changed_when: network_mode_cmd.rc == 0
+
+- name: Cleanup crc (required after network-mode change)
+  ansible.builtin.command: /usr/local/bin/crc cleanup
+  register: cleanup_crc_cmd
+  changed_when: cleanup_crc_cmd.rc == 0
+
+- name: Setup crc (creates new network configuration)
+  ansible.builtin.command: /usr/local/bin/crc setup
+  register: setup_crc_cmd
+  changed_when: setup_crc_cmd.rc == 0
+
+- name: Configure crc settings
   ansible.builtin.shell:
     cmd: |
       /usr/local/bin/crc config set consent-telemetry no
@@ -32,41 +52,16 @@
       /usr/local/bin/crc config set disk-size {{ crc_disk_size | default('500') }}
       /usr/local/bin/crc config set kubeadmin-password {{ crc_kubeadmin_password | default('crc') }}
       /usr/local/bin/crc config set memory {{ crc_memory | default('57344') }}
-      /usr/local/bin/crc config set network-mode system
       /usr/local/bin/crc config set pull-secret-file /usr/local/etc/pull-secret.txt
   register: config_crc_cmd
-  changed_when: config_crc_cmd.rc != 0
+  changed_when: config_crc_cmd.rc == 0
 
-- name: Display output
+- name: Display config output
   ansible.builtin.debug:
     var: "{{ item }}"
   loop:
     - config_crc_cmd.stdout_lines
     - config_crc_cmd.stderr_lines
-
-- name: Cleanup crc (required after network-mode change)
-  ansible.builtin.command: /usr/local/bin/crc cleanup
-  register: cleanup_crc_cmd
-  changed_when: cleanup_crc_cmd.rc == 0
-
-- name: Display cleanup output
-  ansible.builtin.debug:
-    var: "{{ item }}"
-  loop:
-    - cleanup_crc_cmd.stdout_lines
-    - cleanup_crc_cmd.stderr_lines
-
-- name: Setup crc (required after network-mode change)
-  ansible.builtin.command: /usr/local/bin/crc setup
-  register: setup_crc_cmd
-  changed_when: setup_crc_cmd.rc == 0
-
-- name: Display setup output
-  ansible.builtin.debug:
-    var: "{{ item }}"
-  loop:
-    - setup_crc_cmd.stdout_lines
-    - setup_crc_cmd.stderr_lines
 
 - name: Start crc
   ansible.builtin.command: crc start
