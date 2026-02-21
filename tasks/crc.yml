@@ -24,18 +24,6 @@
   become: true
   become_user: root
 
-- name: Setup crc
-  ansible.builtin.command: /usr/local/bin/crc setup
-  register: setup_crc_cmd
-  changed_when: setup_crc_cmd.rc != 0
-
-- name: Display output
-  ansible.builtin.debug:
-    var: "{{ item }}"
-  loop:
-    - setup_crc_cmd.stdout_lines
-    - setup_crc_cmd.stderr_lines
-
 - name: Configure crc
   ansible.builtin.shell:
     cmd: |
@@ -56,12 +44,36 @@
     - config_crc_cmd.stdout_lines
     - config_crc_cmd.stderr_lines
 
+- name: Cleanup crc (required after network-mode change)
+  ansible.builtin.command: /usr/local/bin/crc cleanup
+  register: cleanup_crc_cmd
+  changed_when: cleanup_crc_cmd.rc == 0
+
+- name: Display cleanup output
+  ansible.builtin.debug:
+    var: "{{ item }}"
+  loop:
+    - cleanup_crc_cmd.stdout_lines
+    - cleanup_crc_cmd.stderr_lines
+
+- name: Setup crc (required after network-mode change)
+  ansible.builtin.command: /usr/local/bin/crc setup
+  register: setup_crc_cmd
+  changed_when: setup_crc_cmd.rc == 0
+
+- name: Display setup output
+  ansible.builtin.debug:
+    var: "{{ item }}"
+  loop:
+    - setup_crc_cmd.stdout_lines
+    - setup_crc_cmd.stderr_lines
+
 - name: Start crc
   ansible.builtin.command: crc start
   register: start_crc_cmd
-  changed_when: start_crc_cmd.rc != 0
+  changed_when: start_crc_cmd.rc == 0
 
-- name: Display output
+- name: Display start output
   ansible.builtin.debug:
     var: "{{ item }}"
   loop:
