@@ -44,6 +44,7 @@
       /usr/local/bin/crc config set disk-size {{ crc_disk_size | default('500') }}
       /usr/local/bin/crc config set kubeadmin-password {{ crc_kubeadmin_password | default('crc') }}
       /usr/local/bin/crc config set memory {{ crc_memory | default('57344') }}
+      /usr/local/bin/crc config set network-mode system
       /usr/local/bin/crc config set pull-secret-file /usr/local/etc/pull-secret.txt
   register: config_crc_cmd
   changed_when: config_crc_cmd.rc != 0

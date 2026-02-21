@@ -68,7 +68,7 @@ crc_argocd_app_repo: ''
 #### Default value
 
 ```YAML
-crc_backend_ip: 192.168.130.11
+crc_backend_ip: 127.0.0.1
 ```
 
 ### crc_cpus
