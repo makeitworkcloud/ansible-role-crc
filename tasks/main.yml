@@ -8,8 +8,6 @@
   ansible.builtin.include_tasks: hosts.yml
 - name: Running crc.yml
   ansible.builtin.include_tasks: crc.yml
-- name: Running haproxy-config.yml (after CRC deployed)
-  ansible.builtin.include_tasks: haproxy-config.yml
 - name: Running certs.yml
   ansible.builtin.include_tasks: certs.yml
 - name: Running gitops.yml

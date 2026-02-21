@@ -10,6 +10,9 @@ crc_version: latest
 # External domain for routes/API
 crc_external_domain: crc.local
 
+# CRC VM IP address (static)
+crc_backend_ip: 192.168.130.11
+
 # ArgoCD Application configuration
 # Set crc_argocd_app_repo to enable GitOps operator and application creation
 crc_argocd_app_repo: ""
