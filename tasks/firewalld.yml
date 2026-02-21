@@ -4,6 +4,10 @@
     service: http
     permanent: true
     state: enabled
+    zone: "{{ item }}"
+  loop:
+    - public
+    - libvirt
   become: true
   become_user: root
 
@@ -12,6 +16,10 @@
     service: https
     permanent: true
     state: enabled
+    zone: "{{ item }}"
+  loop:
+    - public
+    - libvirt
   become: true
   become_user: root
 
@@ -20,5 +28,9 @@
     service: kube-apiserver
     permanent: true
     state: enabled
+    zone: "{{ item }}"
+  loop:
+    - public
+    - libvirt
   become: true
   become_user: root
